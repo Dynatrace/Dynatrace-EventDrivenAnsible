@@ -1,6 +1,6 @@
 ## Dynatrace + Red Hat Event Driven Ansible : Auto-Remediation
 
-The plugin provides the Dynatrace Event source which captures all problems from your tenant and in conjunction with Ansible EDA rulebooks helps to enable auto-remediation 
+This Event source plugin from Dynatrace captures all problems from your Dynatrace tenant and in conjunction with Ansible EDA rulebooks helps to enable auto-remediation in your environment.
 > **Note**
 > This product is not officially supported by Dynatrace!
 
