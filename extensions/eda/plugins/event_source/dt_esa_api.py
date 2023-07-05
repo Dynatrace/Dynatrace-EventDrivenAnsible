@@ -31,7 +31,7 @@ async def getproblems(dt_host: str, dt_token: str) -> None:
         async with session.get(url) as resp:
             try:
                 return await resp.json()
-            except Exception as err:
+            except ConnectionError as err:
                 logging.exception("Error %s", err.message)  # pylint: disable=E1101
                 logging.warning(resp.status_code)
                 logging.warning(resp.text)
@@ -77,7 +77,7 @@ async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
     """
     dt_api_host = args.get("dt_api_host")
     dt_api_token = args.get("dt_api_token")
-    delay = int(args.get("delay", 40))
+    delay = int(args.get("delay", 60))
     while True:
         problems = await getproblems(dt_api_host, dt_api_token)
         for problem in problems.get("problems"):
