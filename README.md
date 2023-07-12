@@ -9,6 +9,37 @@ This Event source plugin from Dynatrace captures all problems from your Dynatrac
 * Ansible EDA controller where this plugin will be installed within the Dynatrace collection
 * GitHub repository forked from this repository
 
+# rulebook
+  sources:
+    - dynatrace.eda.dt_esa_api:
+        dt_api_host:     # Dynatrace hostname to listen to
+        dt_api_token:    # API token
+
+# Examples
+
+---
+- name: Listen for events on a webhook
+  hosts: all
+  sources:
+    - dynatrace.eda.dt_esa_api:
+        dt_api_host: "https://abc.live.dynatrace.com" or "https://abc.apps.dynatrace.com"
+        dt_api_token: "asjfsjkfjfjh"
+        delay: 60 (Default is 1 min) i.e plugin runs every 1 minute
+
+  rules:
+    - name: Problem payload Dynatrace for CPU issue
+      condition: event.payload.problemTitle contains "CPU saturation"
+      action:
+        run_job_template:
+          name: "Remediate CPU saturation issue"
+          organization: "Default"
+    - name: Problem payload Dynatrace for App Failure rate increase issue
+      condition: event.payload.problemTitle contains "Failure rate increase"
+      action:
+        run_playbook:
+          name: "Remediate Application issue"
+          organization: "Default
+
 ## Licensing
 
 We are using Apache License 2.0 as our default.
@@ -35,6 +66,12 @@ Apache header:
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+
+# rulebook
+  sources:
+    - dynatrace.eda.dt_esa_api:
+        dt_api_host:     # Dynatrace hostname to listen to
+        dt_api_token:    # API token
 
 ## Additional Questions/Remarks
 
