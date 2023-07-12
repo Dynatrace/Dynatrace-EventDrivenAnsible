@@ -5,18 +5,18 @@ This Event source plugin from Dynatrace captures all problems from your Dynatrac
 ## Requirements:
 * Dynatrace SaaS or Managed environment
 * Dynatrace API Token with the following permissions: `Read configuration`, `Write configuration`, `Access problem and event feed, metrics, and topology`
-* Ansible Automation Platform with Controller instance
-* Ansible EDA controller where this plugin will be installed within the Dynatrace collection
-* GitHub repository forked from this repository
+* Ansible Automation Platform with EDA Controller instance
 
+```yaml
 # rulebook
   sources:
     - dynatrace.eda.dt_esa_api:
         dt_api_host:     # Dynatrace hostname to listen to
         dt_api_token:    # API token
+```
 
-# Examples
-
+# Example rulebook
+```yaml
 ---
 - name: Listen for events on a webhook
   hosts: all
@@ -36,9 +36,17 @@ This Event source plugin from Dynatrace captures all problems from your Dynatrac
     - name: Problem payload Dynatrace for App Failure rate increase issue
       condition: event.payload.problemTitle contains "Failure rate increase"
       action:
-        run_playbook:
+        run_job_template:
           name: "Remediate Application issue"
-          organization: "Default
+          organization: "Default"
+    - name: Update comments in Dynatrace
+      condition: 
+        all: 
+          - event.status == "OPEN"
+      action:
+        run_playbook:
+          name: dt-update-comments.yml
+```
 
 ## Licensing
 
