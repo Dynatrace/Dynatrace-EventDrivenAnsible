@@ -7,14 +7,6 @@ This Event source plugin from Dynatrace captures all problems from your Dynatrac
 * Dynatrace API Token with the following permissions: `Read configuration`, `Write configuration`, `Access problem and event feed, metrics, and topology`
 * Ansible Automation Platform with EDA Controller instance
 
-```yaml
-# rulebook
-  sources:
-    - dynatrace.eda.dt_esa_api:
-        dt_api_host:     # Dynatrace hostname to listen to
-        dt_api_token:    # API token
-```
-
 # Example rulebook
 ```yaml
 ---
@@ -75,15 +67,9 @@ Apache header:
     See the License for the specific language governing permissions and
     limitations under the License.
 
-# rulebook
-  sources:
-    - dynatrace.eda.dt_esa_api:
-        dt_api_host:     # Dynatrace hostname to listen to
-        dt_api_token:    # API token
-
 ## Additional Questions/Remarks
 
-If you do have additional questions/remarks, feel free to reach out to OSPO, either via slack or email.
+If you do have additional questions/remarks, feel free to reach out to Dynatrace support(support@dynatrace.com), either via slack or email.
 
 If you think this template did not solve all your problems, please also let us know, either with a message or a pull request.
 Together we can improve this template to make it easier for our future projects.
