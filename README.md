@@ -4,7 +4,7 @@ This Event source plugin from Dynatrace captures all problems from your Dynatrac
 
 ## Requirements:
 * Dynatrace SaaS or Managed environment
-* Dynatrace API Token with the following permissions: `Read configuration`, `Write configuration`, `Access problem and event feed, metrics, and topology`
+* Dynatrace API Token with the following permissions: `Read problems`, `Write problems`, `Read configuration`, `Write configuration`, `Access problem and event feed, metrics, and topology`
 * Ansible Automation Platform with EDA Controller instance
 
 # Example rulebook
