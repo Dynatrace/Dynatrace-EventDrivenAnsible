@@ -33,7 +33,7 @@ async def getproblems(dt_host: str, dt_token: str) -> None:
                 return await resp.json()
             except ConnectionError as err:
                 logging.exception("Error %s", err.message)  # pylint: disable=E1101
-                logging.warning(resp.status_code)
+                logging.warning(resp.status)
                 logging.warning(resp.text)
                 return {}
 
@@ -61,7 +61,7 @@ async def updatedtproblem(prob_id: str, dtapihost: str, dtapitoken: str) -> None
         resp = await session.post(url, json=commentbody)
         warning_status = 201
         if resp.status != warning_status:
-            logging.warning(resp.status_code)
+            logging.warning(resp.status)
             logging.warning(resp.text)
 
 
