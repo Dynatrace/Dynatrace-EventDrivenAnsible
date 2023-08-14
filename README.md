@@ -13,20 +13,20 @@ This Event source plugin from Dynatrace captures all problems from your Dynatrac
 - name: Listen for events on a webhook
   hosts: all
   sources:
-    - dynatrace.eda.dt_esa_api:
+    - dynatrace.event_driven_ansible.dt_esa_api:
         dt_api_host: "https://abc.live.dynatrace.com" or "https://abc.apps.dynatrace.com"
         dt_api_token: "asjfsjkfjfjh"
         delay: 60 (Default is 1 min) i.e plugin runs every 1 minute
 
   rules:
     - name: Problem payload Dynatrace for CPU issue
-      condition: event.payload.problemTitle contains "CPU saturation"
+      condition: event.problemTitle contains "CPU saturation"
       action:
         run_job_template:
           name: "Remediate CPU saturation issue"
           organization: "Default"
     - name: Problem payload Dynatrace for App Failure rate increase issue
-      condition: event.payload.problemTitle contains "Failure rate increase"
+      condition: event.problemTitle contains "Failure rate increase"
       action:
         run_job_template:
           name: "Remediate Application issue"
