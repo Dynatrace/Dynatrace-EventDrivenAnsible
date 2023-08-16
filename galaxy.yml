@@ -33,7 +33,7 @@ license:
 #license_file: ''
 
 # Must also include one of the following: application, cloud, database, infrastructure, linux, monitoring, networking, security, storage,  tools, windows
-tags: [dynatrace, eda]
+tags: [dynatrace, eda, monitoring, tools, cloud]
 
 # Collections that this collection requires to be installed for it to be usable. The key of the dict is the
 # collection label 'namespace.name'. The value is a version range
