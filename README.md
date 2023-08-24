@@ -20,13 +20,13 @@ This Event source plugin from Dynatrace captures all problems from your Dynatrac
 
   rules:
     - name: Problem payload Dynatrace for CPU issue
-      condition: event.problemTitle contains "CPU saturation"
+      condition: event.title contains "CPU saturation"
       action:
         run_job_template:
           name: "Remediate CPU saturation issue"
           organization: "Default"
     - name: Problem payload Dynatrace for App Failure rate increase issue
-      condition: event.problemTitle contains "Failure rate increase"
+      condition: event.title contains "Failure rate increase"
       action:
         run_job_template:
           name: "Remediate Application issue"
