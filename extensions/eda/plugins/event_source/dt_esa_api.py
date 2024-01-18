@@ -26,6 +26,7 @@ async def getproblems(dt_host: str, dt_token: str) -> None:
     timeout1 = aiohttp.ClientTimeout(total=30)
     async with aiohttp.ClientSession(
         headers={"Authorization": f"Api-Token {dt_token}"}, timeout=timeout1,
+        trust_env=True,
     ) as session:
         url = f"{dt_host}/api/v2/problems?fields=recentComments&from=now-10m&to=now"
         async with session.get(url) as resp:
@@ -53,6 +54,7 @@ async def updatedtproblem(prob_id: str, dtapihost: str, dtapitoken: str) -> None
     timeout1 = aiohttp.ClientTimeout(total=30)
     async with aiohttp.ClientSession(
         headers={"Authorization": f"Api-Token {dtapitoken}"}, timeout=timeout1,
+        trust_env=True,
     ) as session:
         url = f"{dtapihost}/api/v2/problems/{prob_id}/comments"
         commentbody = {}
