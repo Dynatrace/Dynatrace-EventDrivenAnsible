@@ -1,0 +1,8 @@
+{
+  "eventData": {
+    "event.category": "AVAILABILITY",
+    "event.name": "Monitoring not available",
+    "event.status": "ACTIVE",
+    "affected_entity_ids": ["CLUSTER-123456789"]
+  }
+}
