@@ -2,7 +2,8 @@
 dt_webhook.py
 
 Description:
-This is an event source plugin for receiving events via a webhook from the "send-event-to-eda" action of Dynatrace Workflows.
+This is an event source plugin for receiving events via a webhook 
+from the "send-event-to-eda" action of Dynatrace Workflows.
 The payload must be a valid JSON object.
 
 Arguments:
@@ -37,21 +38,23 @@ from typing import Any, Dict
 from aiohttp import web
 
 logger = logging.getLogger(__name__)
-routes = web.RouteTableDef() 
+routes = web.RouteTableDef()
 
 # initialize loggger configuration
 def _initialize_logger_config():
-    logging.basicConfig(format='[%(asctime)s] - %(pathname)s: %(message)s', level=logging.INFO, datefmt='%Y-%m-%d %I:%M:%S')
+    logging.basicConfig(format='[%(asctime)s] - %(pathname)s: %(message)s',
+                       level=logging.INFO, datefmt='%Y-%m-%d %I:%M:%S')
 
 # request handler for incoming events
-@routes.post("/event") 
+@routes.post("/event")
 async def handle_event(request: web.Request) -> web.Response:
+    """Handle received event and put it on the queue"""
     logger.info("Received event")
     try:
         payload = await request.json()
     except json.JSONDecodeError as exc:
         logger.error("Failed to parse JSON payload: %s", exc)
-        raise web.HTTPBadRequest(reason="Invalid JSON payload") from None 
+        raise web.HTTPBadRequest(reason="Invalid JSON payload") from None
     headers = dict(request.headers)
     headers.pop("Authorization", None)
     data = {
@@ -62,12 +65,13 @@ async def handle_event(request: web.Request) -> web.Response:
     await request.app["queue"].put(data)
     return web.json_response({})
 
-def _parse_auth_header(scheme: str, token: str, configuredToken) -> (str, str):     
+def _parse_auth_header(scheme: str, token: str, configured_token) -> (str, str):
+    """Check authorization type and token"""
     if scheme != "Bearer":
         msg = f"Authorization type {scheme} is not allowed"
         logger.error(msg)
         raise web.HTTPUnauthorized(reason=msg) from None
-    if token != configuredToken:
+    if token != configured_token:
         msg = "Invalid authorization token"
         logger.error(msg)
         raise web.HTTPUnauthorized(reason=msg) from None
@@ -75,6 +79,7 @@ def _parse_auth_header(scheme: str, token: str, configuredToken) -> (str, str):
 
 @web.middleware
 async def check_auth(request: web.Request, handler: Callable) -> web.StreamResponse:
+    """Check authorization header"""
     try:
         scheme, token = request.headers["Authorization"].strip().split(" ")
         _parse_auth_header(scheme, token, request.app["token"])
@@ -93,7 +98,7 @@ def _set_app_attributes(args: Dict[str, Any]) -> Dict[str, Any]:
         msg = "Host is missing as an argument"
         logger.error(msg)
         raise ValueError(msg)
-    
+
     if "port" not in args:
         msg = "Port is missing as an argument"
         logger.error(msg)
@@ -102,8 +107,8 @@ def _set_app_attributes(args: Dict[str, Any]) -> Dict[str, Any]:
     if "token" not in args:
         msg = "Token is missing as an argument"
         logger.error(msg)
-        raise ValueError(msg) 
-    
+        raise ValueError(msg)
+
     app_attrs = {}
     app_attrs["host"] = args.get("host")
     app_attrs["port"] = args.get("port")
@@ -113,6 +118,7 @@ def _set_app_attributes(args: Dict[str, Any]) -> Dict[str, Any]:
 
 # Entrypoint from ansible-rulebook
 async def main(queue: asyncio.Queue, args: Dict[str, Any]):
+    """entrypoint from ansible-rulebook cli"""
     _initialize_logger_config()
     logging.info("Starting dt_webhook...")
 
@@ -128,23 +134,25 @@ async def main(queue: asyncio.Queue, args: Dict[str, Any]):
     await runner.setup()
     site = web.TCPSite(
         runner,
-        app_attrs["host"], 
+        app_attrs["host"],
         app_attrs["port"],
     )
     await site.start()
     logger.info("dt_webhook is running and waiting for events")
 
     try:
-        await asyncio.Future() 
+        await asyncio.Future()
     except asyncio.CancelledError:
-        logger.info("Webhook plugin stopped due to an unknown error")
+        logger.info("Webhook plugin stopped due to an error")
     finally:
         await runner.cleanup()
 
+# Entrypoint when running directly.
 if __name__ == "__main__":
-
     class MockQueue:
+        """A mock queue"""
         async def put(self, event):
+            """Print event"""
             print(event)
 
     asyncio.run(
