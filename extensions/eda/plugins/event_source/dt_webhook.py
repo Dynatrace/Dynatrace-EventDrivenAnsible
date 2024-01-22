@@ -1,12 +1,12 @@
-"""
-dt_webhook.py
+"""dt_webhook.py.
 
 Description:
-This is an event source plugin for receiving events via a webhook 
+This is an event source plugin for receiving events via a webhook
 from the "send-event-to-eda" action of Dynatrace Workflows.
 The payload must be a valid JSON object.
 
 Arguments:
+---------
   - host:     The hostname to listen to
   - port:     The TCP port to listen to
   - token:    The authentication token expected from Dynatrace
@@ -15,10 +15,10 @@ Usage in a rulebook:
 - name: Watch for new events
   hosts: localhost
   sources:
-	- dynatrace.event_driven_ansible.dt_webhook:
-    	    host: 0.0.0.0
-    	    port: 5000
-    	    token: <your-token>
+    - dynatrace.event_driven_ansible.dt_webhook:
+            host: 0.0.0.0
+            port: 5000
+            token: <your-token>
 
   rules:
     - name: API Endpoint not available
@@ -26,34 +26,39 @@ Usage in a rulebook:
       action:
         run_job_template:
           name: "Run my job template"
-          organization: "Default"        
-"""
+          organization: "Default"
 
+"""
 import asyncio
 import json
 import logging
-
 from collections.abc import Callable
-from typing import Any, Dict
+from typing import Any
+
 from aiohttp import web
 
 logger = logging.getLogger(__name__)
 routes = web.RouteTableDef()
 
+
 # initialize loggger configuration
-def _initialize_logger_config():
-    logging.basicConfig(format='[%(asctime)s] - %(pathname)s: %(message)s',
-                       level=logging.INFO, datefmt='%Y-%m-%d %I:%M:%S')
+def _initialize_logger_config() -> None:
+    logging.basicConfig(
+        format="[%(asctime)s] - %(pathname)s: %(message)s",
+        level=logging.INFO,
+        datefmt="%Y-%m-%d %I:%M:%S",
+    )
+
 
 # request handler for incoming events
 @routes.post("/event")
 async def handle_event(request: web.Request) -> web.Response:
-    """Handle received event and put it on the queue"""
+    """Handle received event and put it on the queue."""
     logger.info("Received event")
     try:
         payload = await request.json()
-    except json.JSONDecodeError as exc:
-        logger.error("Failed to parse JSON payload: %s", exc)
+    except json.JSONDecodeError:
+        logger.exception("Failed to parse JSON payload: %s")
         raise web.HTTPBadRequest(reason="Invalid JSON payload") from None
     headers = dict(request.headers)
     headers.pop("Authorization", None)
@@ -65,8 +70,9 @@ async def handle_event(request: web.Request) -> web.Response:
     await request.app["queue"].put(data)
     return web.json_response({})
 
-def _parse_auth_header(scheme: str, token: str, configured_token) -> (str, str):
-    """Check authorization type and token"""
+
+def _parse_auth_header(scheme: str, token: str, configured_token: str) -> (str, str):
+    """Check authorization type and token."""
     if scheme != "Bearer":
         msg = f"Authorization type {scheme} is not allowed"
         logger.error(msg)
@@ -77,23 +83,25 @@ def _parse_auth_header(scheme: str, token: str, configured_token) -> (str, str):
         raise web.HTTPUnauthorized(reason=msg) from None
     return scheme, token
 
+
 @web.middleware
 async def check_auth(request: web.Request, handler: Callable) -> web.StreamResponse:
-    """Check authorization header"""
+    """Check authorization header."""
     try:
         scheme, token = request.headers["Authorization"].strip().split(" ")
         _parse_auth_header(scheme, token, request.app["token"])
     except KeyError:
         msg = "Authorization header is missing or not correct"
-        logger.error(msg)
+        logger.exception(msg)
         raise web.HTTPUnauthorized(reason=msg) from None
     except ValueError:
         msg = "Invalid authorization header"
-        logger.error(msg)
+        logger.exception(msg)
         raise web.HTTPUnauthorized(reason=msg) from None
     return await handler(request)
 
-def _set_app_attributes(args: Dict[str, Any]) -> Dict[str, Any]:
+
+def _set_app_attributes(args: dict[str, Any]) -> dict[str, Any]:
     if "host" not in args:
         msg = "Host is missing as an argument"
         logger.error(msg)
@@ -116,9 +124,10 @@ def _set_app_attributes(args: Dict[str, Any]) -> Dict[str, Any]:
 
     return app_attrs
 
+
 # Entrypoint from ansible-rulebook
-async def main(queue: asyncio.Queue, args: Dict[str, Any]):
-    """entrypoint from ansible-rulebook cli"""
+async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
+    """Entrypoint from ansible-rulebook cli."""
     _initialize_logger_config()
     logging.info("Starting dt_webhook...")
 
@@ -147,13 +156,17 @@ async def main(queue: asyncio.Queue, args: Dict[str, Any]):
     finally:
         await runner.cleanup()
 
+
 # Entrypoint when running directly.
 if __name__ == "__main__":
+
     class MockQueue:
-        """A mock queue"""
-        async def put(self, event):
-            """Print event"""
-            print(event)
+        """A mock queue."""
+
+        async def put(self: "MockQueue", event: dict) -> None:
+            """Print event."""
+            print(event) # noqa: T201
+
 
     asyncio.run(
         main(
