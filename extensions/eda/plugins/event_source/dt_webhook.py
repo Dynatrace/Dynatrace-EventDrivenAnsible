@@ -1,3 +1,4 @@
+# ruff: noqa: FA102
 """dt_webhook.py.
 
 Description:
@@ -35,6 +36,7 @@ import logging
 from collections.abc import Callable
 from typing import Any
 
+# pylint: disable-next=import-error
 from aiohttp import web
 
 logger = logging.getLogger(__name__)
@@ -53,7 +55,22 @@ def _initialize_logger_config() -> None:
 # request handler for incoming events
 @routes.post("/event")
 async def handle_event(request: web.Request) -> web.Response:
-    """Handle received event and put it on the queue."""
+    """Handle received event and put it on the queue.
+
+    Parameters
+    ----------
+    request : web.Request
+        Received request.
+
+    Returns
+    -------
+    Response with empty JSON object.
+
+    Raises
+    ------
+    HTTPBadRequest
+        If the payload can't be parsed as JSON.
+    """
     logger.info("Received event")
     try:
         payload = await request.json()
@@ -71,8 +88,23 @@ async def handle_event(request: web.Request) -> web.Response:
     return web.json_response({})
 
 
-def _parse_auth_header(scheme: str, token: str, configured_token: str) -> (str, str):
-    """Check authorization type and token."""
+def _parse_auth_header(scheme: str, token: str, configured_token: str) -> None:
+    """Check authorization type and token.
+
+    Parameters
+    ----------
+    scheme : str
+        Authorization schema from request header.
+    token : str
+        Token string retrieved from request header.
+    configured_token : str
+        Token string retrieved from args.
+
+    Raises
+    ------
+    HTTPUnauthorized
+        If the authorization type is not allowed or token is invalid
+    """
     if scheme != "Bearer":
         msg = f"Authorization type {scheme} is not allowed"
         logger.error(msg)
@@ -81,12 +113,29 @@ def _parse_auth_header(scheme: str, token: str, configured_token: str) -> (str, 
         msg = "Invalid authorization token"
         logger.error(msg)
         raise web.HTTPUnauthorized(reason=msg) from None
-    return scheme, token
 
 
 @web.middleware
 async def check_auth(request: web.Request, handler: Callable) -> web.StreamResponse:
-    """Check authorization header."""
+    """Check authorization header.
+
+    Parameters
+    ----------
+    request : web.Request
+        Received request.
+    handler : Callable
+        Request handler.
+
+    Returns
+    -------
+    StreamResponse
+        https://docs.aiohttp.org/en/stable/web_reference.html#aiohttp.web.StreamResponse
+
+    Raises
+    ------
+    HTTPUnauthorized
+        If the authorization type is not allowed or token is invalid
+    """
     try:
         scheme, token = request.headers["Authorization"].strip().split(" ")
         _parse_auth_header(scheme, token, request.app["token"])
@@ -127,7 +176,15 @@ def _set_app_attributes(args: dict[str, Any]) -> dict[str, Any]:
 
 # Entrypoint from ansible-rulebook
 async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
-    """Entrypoint from ansible-rulebook cli."""
+    """Entrypoint from ansible-rulebook cli.
+
+    Parameters
+    ----------
+    queue : asyncio.Queue
+        Problem queue.
+    args : Dict[str,Any])
+        Args containing the host and API access token.
+    """
     _initialize_logger_config()
     logging.info("Starting dt_webhook...")
 
@@ -155,26 +212,3 @@ async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
         logger.info("Webhook plugin stopped due to an error")
     finally:
         await runner.cleanup()
-
-
-# Entrypoint when running directly.
-if __name__ == "__main__":
-
-    class MockQueue:
-        """A mock queue."""
-
-        async def put(self: "MockQueue", event: dict) -> None:
-            """Print event."""
-            print(event) # noqa: T201
-
-
-    asyncio.run(
-        main(
-            MockQueue(),
-            {
-                "host": "localhost",
-                "port": 1234,
-                "token": "test",
-            },
-        ),
-    )
