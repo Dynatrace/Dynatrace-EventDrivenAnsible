@@ -124,7 +124,8 @@ async def check_auth(request: web.Request, handler: Callable) -> web.StreamRespo
     request : web.Request
         Received request.
     handler : Callable
-        Request handler.
+        Request handler
+        https://docs.aiohttp.org/en/stable/web_quickstart.html#aiohttp-web-handler
 
     Returns
     -------
@@ -183,7 +184,7 @@ async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
     queue : asyncio.Queue
         Problem queue.
     args : Dict[str,Any])
-        Args containing the host and API access token.
+        Args containing the host, port and access token.
     """
     _initialize_logger_config()
     logging.info("Starting dt_webhook...")
