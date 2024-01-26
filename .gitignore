@@ -14,3 +14,5 @@ tests/output
 *egg-info
 .tox
 releases/*
+vars.yml
+*__pycac
