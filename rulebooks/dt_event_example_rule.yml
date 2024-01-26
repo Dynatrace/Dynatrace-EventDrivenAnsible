@@ -9,7 +9,7 @@
 
   rules:
     - name: API Endpoint not available
-      condition: event.payload.eventData["event.name"] contains "Monitoring not available"
+      condition: event.payload.eventData["event.name"] is match ("Monitoring not available")
       action:
         run_playbook:
           name: playbooks/run-task.yml   
