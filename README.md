@@ -4,7 +4,7 @@ This Event source plugin from Dynatrace captures all problems from your Dynatrac
 
 ## Requirements:
 * Dynatrace SaaS or Managed environment
-* Dynatrace API Token with the following permissions: `Read problems`, `Write problems`, `Read configuration`, `Write configuration`, `Access problem and event feed, metrics, and topology`
+* Dynatrace API Token with the following scopes: `Read problems` and `Write problems`
 * Ansible Automation Platform with EDA Controller instance
 
 # Example rulebook
@@ -14,19 +14,19 @@ This Event source plugin from Dynatrace captures all problems from your Dynatrac
   hosts: all
   sources:
     - dynatrace.event_driven_ansible.dt_esa_api:
-        dt_api_host: "https://abc.live.dynatrace.com" or "https://abc.apps.dynatrace.com"
+        dt_api_host: "https://abc.live.dynatrace.com"
         dt_api_token: "asjfsjkfjfjh"
-        delay: 60 (Default is 1 min) i.e plugin runs every 1 minute
+        delay: 60 # Default is 60 seconds, i.e. the plugin polls problems every 60 seconds
 
   rules:
     - name: Problem payload Dynatrace for CPU issue
-      condition: event.title contains "CPU saturation"
+      condition: event.title is match("CPU saturation")
       action:
         run_job_template:
           name: "Remediate CPU saturation issue"
           organization: "Default"
     - name: Problem payload Dynatrace for App Failure rate increase issue
-      condition: event.title contains "Failure rate increase"
+      condition: event.title is match("Failure rate increase")
       action:
         run_job_template:
           name: "Remediate Application issue"
