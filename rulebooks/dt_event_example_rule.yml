@@ -1,0 +1,15 @@
+---
+- name: Listen for events on dt_webhook
+  hosts: all
+  sources:
+    - dt_webhook: #for local tests, use FQCN dynatrace.event_driven_ansible.dt_webhook in production
+        host: localhost
+        port: 1234
+        token: '{{ var_eda_token }}' 
+
+  rules:
+    - name: API Endpoint not available
+      condition: event.payload.eventData["event.name"] is match ("Monitoring not available")
+      action:
+        run_playbook:
+          name: playbooks/run-task.yml   
