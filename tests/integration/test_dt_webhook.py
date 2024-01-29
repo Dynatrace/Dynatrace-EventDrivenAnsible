@@ -24,13 +24,27 @@ async def run_webhook() -> None:  # noqa: FA102, D103
     await dt_webhook(asyncio.Queue(), args)
 
 @pytest.mark.asyncio
+async def test_with_incorrect_path():
+    async def do_request():
+        async with aiohttp.ClientSession(headers=headers) as session:
+            async with session.post(f'http://{args["host"]}:{args["port"]}/something', data=payload) as resp:
+                plugin_task.cancel()
+                assert resp.status == HTTPStatus.NOT_FOUND
+
+
+    plugin_task = asyncio.create_task(run_webhook())
+    request_task = asyncio.create_task(do_request())
+    await asyncio.gather(plugin_task, request_task)
+
+@pytest.mark.asyncio
 async def test_event_body_valid_json():
     async def do_request():
         async with aiohttp.ClientSession(headers=headers) as session:
             async with session.post(url, data=payload) as resp:
                 plugin_task.cancel()
+                text = await resp.text()
                 assert resp.status == HTTPStatus.OK
-                assert resp.json == json.dumps({})
+                assert text == "{}"
 
     plugin_task = asyncio.create_task(run_webhook())
     request_task = asyncio.create_task(do_request())

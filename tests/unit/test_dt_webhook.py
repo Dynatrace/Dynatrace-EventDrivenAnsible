@@ -14,11 +14,6 @@ args = {
     "token": "thisisnotanactualtoken",
 }
 
-args_incomplete = {
-    "host": "127.0.0.1",
-    "token": "thisisnotanactualtoken",
-}
-
 url = f'http://{args["host"]}:{args["port"]}/event'
 payload = {"eventId": "1A2B3C"}
 headers = {"Authorization": "Bearer " + args["token"]}
@@ -44,4 +39,21 @@ def test_set_app_attributes():
 
 def test_set_app_attributes_without_port():
     with pytest.raises(ValueError, match="Port is missing as an argument" ):
-        _set_app_attributes(args_incomplete)
+        _set_app_attributes({
+            "host": "127.0.0.1",
+            "token": "thisisnotanactualtoken",
+        })
+
+def test_set_app_attributes_without_host():
+    with pytest.raises(ValueError, match="Host is missing as an argument" ):
+        _set_app_attributes({
+            "port": "1234",
+            "token": "thisisnotanactualtoken",
+        })
+
+def test_set_app_attributes_without_token():
+    with pytest.raises(ValueError, match="Token is missing as an argument" ):
+        _set_app_attributes({
+            "host": "127.0.0.1",
+            "port": "1234",
+        })
