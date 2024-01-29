@@ -17,6 +17,7 @@ This Event source plugin from Dynatrace captures all problems from your Dynatrac
         dt_api_host: "https://abc.live.dynatrace.com"
         dt_api_token: "asjfsjkfjfjh"
         delay: 60 # Default is 60 seconds, i.e. the plugin polls problems every 60 seconds
+        proxy: "http://my-proxy:3128" # Proxy through which to access host. (default is none)
 
   rules:
     - name: Problem payload Dynatrace for CPU issue

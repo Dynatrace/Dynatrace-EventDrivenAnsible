@@ -9,7 +9,7 @@ from typing import Any
 import aiohttp
 
 
-async def getproblems(dt_host: str, dt_token: str) -> None:
+async def getproblems(dt_host: str, dt_token: str, proxy: str) -> None:
     """Pull Dynatrace detected problems from Dynatrace Problems API.
 
     Parameters
@@ -18,6 +18,8 @@ async def getproblems(dt_host: str, dt_token: str) -> None:
         Dynatrace host.
     dt_token : str
         Dynatrace access token.
+    proxy: str
+        Proxy through which to access host.
 
     Returns
     -------
@@ -30,7 +32,7 @@ async def getproblems(dt_host: str, dt_token: str) -> None:
         raise_for_status=True,
     ) as session:
         url = f"{dt_host}/api/v2/problems?fields=recentComments&from=now-10m&to=now"
-        async with session.get(url) as resp:
+        async with session.get(url=url, proxy=proxy) as resp:
             try:
                 return await resp.json()
             except aiohttp.ClientResponseError:
@@ -41,7 +43,8 @@ async def getproblems(dt_host: str, dt_token: str) -> None:
                 logging.exception("aiohttp client Exception")
 
 
-async def updatedtproblem(prob_id: str, dtapihost: str, dtapitoken: str) -> None:
+async def updatedtproblem(prob_id: str, dtapihost: str, dtapitoken: str,
+                          proxy: str) -> None:
     """Update problem comment once its sent to the EDA server.
 
     Parameters
@@ -52,6 +55,8 @@ async def updatedtproblem(prob_id: str, dtapihost: str, dtapitoken: str) -> None
         Host to query.
     dtapitoken: str
         Host API token.
+    proxy: str
+        Proxy through which to access host.
 
     """
     timeout = aiohttp.ClientTimeout(total=30)
@@ -65,7 +70,7 @@ async def updatedtproblem(prob_id: str, dtapihost: str, dtapitoken: str) -> None
         commentbody["context"] = "Event Driven Ansible"
         commentbody["message"] = "Sent to EDA Server"
         try:
-            resp = await session.post(url, json=commentbody)
+            resp = await session.post(url, json=commentbody, proxy=proxy)
             warning_status = 201
             if resp.status != warning_status:
                 logging.warning(resp.status)
@@ -76,7 +81,6 @@ async def updatedtproblem(prob_id: str, dtapihost: str, dtapitoken: str) -> None
             logging.exception("Exception connecting to Dynatrace API")
         except aiohttp.ClientError:
             logging.exception("aiohttp client Exception")
-
 
 async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
     """Process the problem information.
@@ -91,9 +95,10 @@ async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
     dt_api_host = args.get("dt_api_host")
     dt_api_token = args.get("dt_api_token")
     delay = int(args.get("delay", 60))
+    proxy = args.get("proxy", None)
     try:
         while True:
-            problems = await getproblems(dt_api_host, dt_api_token)
+            problems = await getproblems(dt_api_host, dt_api_token, proxy)
             for problem in problems.get("problems"):
                 pr_comment = problem.get("recentComments").get("comments")
                 commentcount = 0
@@ -108,7 +113,7 @@ async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
                     prob_id = problem.get("problemId")
                     await queue.put(problem)
                     # Once sent update comment to "Sent to EDA server"
-                    await updatedtproblem(prob_id, dt_api_host, dt_api_token)
+                    await updatedtproblem(prob_id, dt_api_host, dt_api_token, proxy)
             await asyncio.sleep(delay)
     except (asyncio.TimeoutError, asyncio.CancelledError):
         logging.exception("Async request timed out or cancelled")
