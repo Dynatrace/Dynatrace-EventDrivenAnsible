@@ -1,6 +1,6 @@
 # Event-source plugin dt_webhook
 
-The dt_webhook event-source plugin is capable of receiving events (from Dynatrace) via a webhook and is extended with token based authentication.
+The dt_webhook event-source plugin is capable of receiving events (from Dynatrace) via a webhook. The webhook is secured using token-based authentication.
 
 ## Run unit/integration tests
 
@@ -10,7 +10,7 @@ The dt_webhook event-source plugin is capable of receiving events (from Dynatrac
  ```
  * Unit tests are located in `/tests/unit/test_dt_webhook.py`
  * Integration tests are located in `/tests/integration/test_dt_webhook.py`
- * Run the following command to execute the tests
+ * Run the following command to execute the unit tests
  ```
  pytest tests/unit/test_dt_webhook.py
  ```
@@ -33,7 +33,7 @@ Install:
 apt-get install python3.9 
 ```
 
- *  pip - package installer for python. 
+ *  pip - package installer for Python. 
      * Easiest way to install is to use the get-pi.py bootstrapping script from PyPa
 
 ```
@@ -91,7 +91,7 @@ ansible-rulebook --rulebook rulebooks/dt_event_example_rule.yml -e rulebooks/var
         token: '{{ var_eda_token }}' 
 ```
 
- * When the rulebook is running you can send a the following curl request to trigger the rulebook from another terminal
+ * When the rulebook is running, you can send the following curl request to trigger the rulebook from another terminal
 
 ```
 curl -X POST --header "Authorization: Bearer <your-test-token>" --data '{
