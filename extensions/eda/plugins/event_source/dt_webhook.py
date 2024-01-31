@@ -70,6 +70,7 @@ async def handle_event(request: web.Request) -> web.Response:
     ------
     HTTPBadRequest
         If the payload can't be parsed as JSON.
+
     """
     logger.info("Received event")
     try:
@@ -104,6 +105,7 @@ def _parse_auth_header(scheme: str, token: str, configured_token: str) -> None:
     ------
     HTTPUnauthorized
         If the authorization type is not allowed or token is invalid
+
     """
     if scheme != "Bearer":
         msg = f"Authorization type {scheme} is not allowed"
@@ -136,6 +138,7 @@ async def check_auth(request: web.Request, handler: Callable) -> web.StreamRespo
     ------
     HTTPUnauthorized
         If the authorization type is not allowed or token is invalid
+
     """
     try:
         scheme, token = request.headers["Authorization"].strip().split(" ")
@@ -185,6 +188,7 @@ async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
         Problem queue.
     args : Dict[str,Any])
         Args containing the host, port and access token.
+
     """
     _initialize_logger_config()
     logging.info("Starting dt_webhook...")

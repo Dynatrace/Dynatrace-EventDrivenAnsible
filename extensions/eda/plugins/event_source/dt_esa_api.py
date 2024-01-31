@@ -22,6 +22,7 @@ async def getproblems(dt_host: str, dt_token: str) -> None:
     Returns
     -------
     Response.
+
     """
     timeout = aiohttp.ClientTimeout(total=30)
     async with aiohttp.ClientSession(
@@ -87,6 +88,7 @@ async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
         Problem queue.
     args : Dict[str,Any])
         Args containing the host and API access token.
+
     """
     dt_api_host = args.get("dt_api_host")
     dt_api_token = args.get("dt_api_token")
