@@ -1,4 +1,4 @@
-# ruff: noqa: FA102
+# ruff: noqa: FA102, D413
 """dt_webhook.py.
 
 Description:
