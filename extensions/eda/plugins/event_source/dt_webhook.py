@@ -6,12 +6,6 @@ This is an event source plugin for receiving events via a webhook
 from the "send-event-to-eda" action of Dynatrace Workflows.
 The payload must be a valid JSON object.
 
-Arguments:
----------
-  - host:     The hostname to listen to
-  - port:     The TCP port to listen to
-  - token:    The authentication token expected from Dynatrace
-
 Usage in a rulebook:
 - name: Watch for new events
   hosts: localhost
@@ -28,6 +22,12 @@ Usage in a rulebook:
         run_job_template:
           name: "Run my job template"
           organization: "Default"
+
+Arguments:
+---------
+  - host:     The hostname to listen to
+  - port:     The TCP port to listen to
+  - token:    The authentication token expected from Dynatrace
 
 """
 import asyncio
