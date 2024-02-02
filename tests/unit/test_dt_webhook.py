@@ -14,19 +14,12 @@ args = {
     "token": "thisisnotanactualtoken",
 }
 
-url = f'http://{args["host"]}:{args["port"]}/event'
-payload = {"eventId": "1A2B3C"}
-headers = {"Authorization": "Bearer " + args["token"]}
-
-
 def test_parse_token_with_incorrect_token():
-    with pytest.raises(web.HTTPUnauthorized,
-    match="Invalid authorization token"):
+    with pytest.raises(web.HTTPUnauthorized, match="Invalid authorization token"):
         _parse_auth_header("Bearer", "thisisnotanactualtoken!", args["token"])
 
 def test_parse_token_invalid_auth_type():
-    with pytest.raises(web.HTTPUnauthorized,
-    match="Authorization type Token is not allowed"):
+    with pytest.raises(web.HTTPUnauthorized, match="Authorization type Token is not allowed"):
         _parse_auth_header("Token", "thisisnotanactualtoken!", args["token"])
 
 
@@ -38,21 +31,21 @@ def test_set_app_attributes():
 
 
 def test_set_app_attributes_without_port():
-    with pytest.raises(ValueError, match="Port is missing as an argument" ):
+    with pytest.raises(ValueError, match="Port is missing as an argument"):
         _set_app_attributes({
             "host": "127.0.0.1",
             "token": "thisisnotanactualtoken",
         })
 
 def test_set_app_attributes_without_host():
-    with pytest.raises(ValueError, match="Host is missing as an argument" ):
+    with pytest.raises(ValueError, match="Host is missing as an argument"):
         _set_app_attributes({
             "port": "1234",
             "token": "thisisnotanactualtoken",
         })
 
 def test_set_app_attributes_without_token():
-    with pytest.raises(ValueError, match="Token is missing as an argument" ):
+    with pytest.raises(ValueError, match="Token is missing as an argument"):
         _set_app_attributes({
             "host": "127.0.0.1",
             "port": "1234",
