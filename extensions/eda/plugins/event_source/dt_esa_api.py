@@ -97,8 +97,7 @@ async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
     dt_api_host = args.get("dt_api_host")
     dt_api_token = args.get("dt_api_token")
     delay = int(args.get("delay", 60))
-     # ruff: noqa: SIM910
-    proxy = args.get("proxy", None)
+    proxy = args.get("proxy", "")
     try:
         while True:
             problems = await getproblems(dt_api_host, dt_api_token, proxy)
