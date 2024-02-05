@@ -25,9 +25,12 @@ async def run_webhook() -> None:  # noqa: FA102, D103
 
 @pytest.mark.asyncio
 async def test_with_incorrect_path():
+    """When posting data to an incorrect path, HTTP 404 Not Found should be returned"""
     async def do_request():
         async with aiohttp.ClientSession(headers=headers) as session:
             async with session.post(f'http://{args["host"]}:{args["port"]}/something', data=payload) as resp:
+                # task_cancel() stops the plugin coroutine which is wrapped into the task will never 
+                # stop and also the test will not be terminated.
                 plugin_task.cancel()
                 assert resp.status == HTTPStatus.NOT_FOUND
 
@@ -38,6 +41,7 @@ async def test_with_incorrect_path():
 
 @pytest.mark.asyncio
 async def test_event_body_valid_json():
+    """When posting valid JSON data, HTTP 200 OK with an empty JSON should be returned"""
     async def do_request():
         async with aiohttp.ClientSession(headers=headers) as session:
             async with session.post(url, data=payload) as resp:
@@ -52,6 +56,7 @@ async def test_event_body_valid_json():
 
 @pytest.mark.asyncio
 async def test_event_body_with_invalid_json():
+    """When posting invalid JSON data, HTTP 400 BAD REQUEST should be returned"""
     async def do_request():
         async with aiohttp.ClientSession(headers=headers) as session:
             async with session.post(url, data="this is no valid json") as resp:
@@ -66,6 +71,7 @@ async def test_event_body_with_invalid_json():
 
 @pytest.mark.asyncio
 async def test_without_auth_header():
+    """When posting data with incorrect Authorization header, HTTP 401 UNAUTHORIZED should be returned"""
     async def do_request():
         async with aiohttp.ClientSession() as session:
             async with session.post(url, data=payload) as resp:
