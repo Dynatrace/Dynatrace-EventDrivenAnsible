@@ -1,13 +1,15 @@
-## Dynatrace + Red Hat Event Driven Ansible : Auto-Remediation
+# Dynatrace + Red Hat Event Driven Ansible: Auto-Remediation
 
 This Event source plugin from Dynatrace captures all problems from your Dynatrace tenant and in conjunction with Ansible EDA rulebooks helps to enable auto-remediation in your environment.
 
-## Requirements:
+## Requirements
+
 * Dynatrace SaaS or Managed environment
 * Dynatrace API Token with the following scopes: `Read problems` and `Write problems`
 * Ansible Automation Platform with EDA Controller instance
 
-# Example rulebook
+## Example rulebook
+
 ```yaml
 ---
 - name: Listen for events on a webhook
@@ -69,7 +71,7 @@ Apache header:
 
 ## Additional Questions/Remarks
 
-If you do have additional questions/remarks, feel free to reach out to Dynatrace support(support@dynatrace.com), either via slack or email.
+If you do have additional questions/remarks, feel free to reach out to Dynatrace support (support@dynatrace.com), either via Slack or email.
 
 If you think this template did not solve all your problems, please also let us know, either with a message or a pull request.
 Together we can improve this template to make it easier for our future projects.
