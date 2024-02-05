@@ -1,0 +1,16 @@
+# python
+*.pyc
+# venv
+venv
+# tests
+tests/output
+.pytest_cache/
+# Ide's
+.vscode
+.idea
+
+# Builds
+*.tar.gz
+*egg-info
+.tox
+releases/*
