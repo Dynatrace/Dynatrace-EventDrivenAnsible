@@ -2,17 +2,40 @@
 
 The dt_webhook event-source plugin is capable of receiving events (from Dynatrace) via a webhook. The webhook is secured using token-based authentication.
 
+## Run tox locally to check linting
+
+To check linting you use tox in your local dev environment. 
+
+```
+ pip install tox
+```
+
+Then run the following command from the project's root folder:
+
+```
+ tox
+```
+
+All the linters configured in the `tox.ini` file will be automatically installed and executed when running the `tox` command
+
+For more details please take a look at [EDA partner testing](https://github.com/ansible/eda-partner-testing/blob/main/README.md)
+
 ## Run unit/integration tests
 
- * In order to run the unit/integration tests you need to install `pytest`
+ * In order to run the unit/integration tests you need to install `pytest`, `pytest-asyncio`
  ```
  pip install pytest
+ pip install pytest-asyncio
  ```
  * Unit tests are located in `/tests/unit/test_dt_webhook.py`
  * Integration tests are located in `/tests/integration/test_dt_webhook.py`
  * Run the following command to execute the unit tests
  ```
  pytest tests/unit/test_dt_webhook.py
+ ```
+ * Run the following command to execute the integration tests
+ ```
+ pytest tests/integration/test_dt_webhook.py
  ```
 
 ## Test dt_webhook locally with ansible-rulebook
