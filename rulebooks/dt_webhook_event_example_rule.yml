@@ -2,7 +2,7 @@
 - name: Listen for events on dt_webhook
   hosts: all
   sources:
-    - dynatrace.event_driven_ansible.dt_webhook: #for local tests use dt_webhook as source
+    - dynatrace.event_driven_ansible.dt_webhook: #use dt_webhook as source for tests with local ansible-rulebook 
         host: localhost
         port: 1234
         token: '{{ var_eda_token }}' 
@@ -11,5 +11,8 @@
     - name: API Endpoint not available
       condition: event.payload.eventData["event.name"] is match ("Monitoring not available")
       action:
-        run_playbook:
-          name: playbooks/run-task.yml   
+        run_job_template:
+          name: "Trigger test playbook"
+          organization: "Default"    
+        #run_playbook: #use run_playbook for local tests with ansible-rulebook 
+          #name: playbooks/run-task.yml   
