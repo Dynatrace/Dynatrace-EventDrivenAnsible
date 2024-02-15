@@ -3,7 +3,7 @@
   hosts: all
   sources:
     - dynatrace.event_driven_ansible.dt_webhook: #use dt_webhook as source for tests with local ansible-rulebook 
-        host: localhost
+        host: 0.0.0.0
         port: 6009
         token: '{{ var_eda_token }}' 
 
