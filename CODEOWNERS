@@ -1,0 +1,20 @@
+#################################################################################
+#
+# Lists the owners of this project
+#
+#################################################################################
+# Lines starting with '#' are comments.
+# Each line is a file pattern followed by one or more owners.
+# These owners will be the default owners for everything in the repo.
+#################################################################################
+# Learn about CODEOWNERS file format:
+# https://help.github.com/en/articles/about-code-owners
+#################################################################################
+# FYI: Owners will be auto-assigned for code reviews as well
+#################################################################################
+
+# Owners for source plugin dt_esa_api.py
+extensions/eda/plugins/event_source/dt_esa_api.py @Jai28 @agrimmer
+
+# Owners for source plugin dt_webhook.py
+extensions/eda/plugins/event_source/dt_webhook.py @dynatrace/eventdrivenansible-member 
