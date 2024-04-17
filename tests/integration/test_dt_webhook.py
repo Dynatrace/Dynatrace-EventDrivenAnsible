@@ -19,6 +19,7 @@ url = f'http://{args["host"]}:{args["port"]}/event'
 payload = json.dumps({"eventId": "1A2B3C"})
 headers = {"Authorization": "Bearer " + args["token"]}
 
+
 async def run_webhook() -> None:  # noqa: FA102, D103
     """Start webhook."""
     await dt_webhook(asyncio.Queue(), args)
