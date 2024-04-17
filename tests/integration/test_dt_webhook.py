@@ -23,6 +23,7 @@ async def run_webhook() -> None:  # noqa: FA102, D103
     """Start webhook."""
     await dt_webhook(asyncio.Queue(), args)
 
+
 @pytest.mark.asyncio
 async def test_with_incorrect_path():
     """When posting data to an incorrect path, HTTP 404 Not Found should be returned"""
@@ -34,10 +35,10 @@ async def test_with_incorrect_path():
                 plugin_task.cancel()
                 assert resp.status == HTTPStatus.NOT_FOUND
 
-
     plugin_task = asyncio.create_task(run_webhook())
     request_task = asyncio.create_task(do_request())
     await asyncio.gather(plugin_task, request_task)
+
 
 @pytest.mark.asyncio
 async def test_event_body_valid_json():
@@ -53,6 +54,7 @@ async def test_event_body_valid_json():
     plugin_task = asyncio.create_task(run_webhook())
     request_task = asyncio.create_task(do_request())
     await asyncio.gather(plugin_task, request_task)
+
 
 @pytest.mark.asyncio
 async def test_event_body_with_invalid_json():

@@ -14,9 +14,11 @@ args = {
     "token": "thisisnotanactualtoken",
 }
 
+
 def test_parse_token_with_incorrect_token():
     with pytest.raises(web.HTTPUnauthorized, match="Invalid authorization token"):
         _parse_auth_header("Bearer", "thisisnotanactualtoken!", args["token"])
+
 
 def test_parse_token_invalid_auth_type():
     with pytest.raises(web.HTTPUnauthorized, match="Authorization type Token is not allowed"):
@@ -37,12 +39,14 @@ def test_set_app_attributes_without_port():
             "token": "thisisnotanactualtoken",
         })
 
+
 def test_set_app_attributes_without_host():
     with pytest.raises(ValueError, match="Host is missing as an argument"):
         _set_app_attributes({
             "port": "1234",
             "token": "thisisnotanactualtoken",
         })
+
 
 def test_set_app_attributes_without_token():
     with pytest.raises(ValueError, match="Token is missing as an argument"):

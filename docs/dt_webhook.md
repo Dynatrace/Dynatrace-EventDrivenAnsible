@@ -90,7 +90,7 @@ Steps to do:
 
 * Checkout the GitHub repository
 
-* Create a vars.yml file in the rulebooks directory and configure the variable var_eda_token. This “token variable” will then be used when running the
+* Create a vars.yml file in the rulebooks directory and configure the variable var_eda_token. This "token variable" will then be used when running the
   rulebook and passed to the event-source plugin. Hint: Currently the token configuration is done by setting a variable. This will be changed in the future.
 
 ```
