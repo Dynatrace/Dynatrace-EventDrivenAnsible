@@ -29,7 +29,7 @@ async def test_with_incorrect_path():
     async def do_request():
         async with aiohttp.ClientSession(headers=headers) as session:
             async with session.post(f'http://{args["host"]}:{args["port"]}/something', data=payload) as resp:
-                # task_cancel() stops the plugin coroutine which is wrapped into the task will never 
+                # task_cancel() stops the plugin coroutine which is wrapped into the task will never
                 # stop and also the test will not be terminated.
                 plugin_task.cancel()
                 assert resp.status == HTTPStatus.NOT_FOUND
