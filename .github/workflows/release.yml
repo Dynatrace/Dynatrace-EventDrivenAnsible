@@ -1,7 +1,7 @@
 ---
 name: Release the ansible collection
 on:
-    release:
+  release:
     types: [published]
 
 jobs:
