@@ -16,21 +16,23 @@ readme: README.md
 # A list of the collection's content authors. Can be just the name or in the format 'Full Name <email> (url)
 # @nicks:irc/im.site#channel'
 authors:
-- Dynatrace <support@dynatrace.com>
+  - Dynatrace <support@dynatrace.com>
 
 
 ### OPTIONAL but strongly recommended
 # A short summary description of the collection
-description: This Event source plugin from Dynatrace captures all problems from your Dynatrace tenant and in conjunction with Ansible EDA rulebooks helps to enable auto-remediation in your environment.
+description: |
+  This Event source plugin from Dynatrace captures all problems from your Dynatrace tenant and in conjunction with
+  Ansible EDA rulebooks helps to enable auto-remediation in your environment.
 
 # Either a single license or a list of licenses for content inside of a collection. Ansible Galaxy currently only
 # accepts L(SPDX,https://spdx.org/licenses/) licenses. This key is mutually exclusive with 'license_file'
 license:
-- Apache-2.0
+  - Apache-2.0
 
 # The path to the license file for the collection. This path is relative to the root of the collection. This key is
 # mutually exclusive with 'license'
-#license_file: ''
+# license_file: ''
 
 # Must also include one of the following: application, cloud, database, infrastructure, linux, monitoring, networking, security, storage,  tools, windows
 tags: [dynatrace, eda, monitoring, tools, cloud]
