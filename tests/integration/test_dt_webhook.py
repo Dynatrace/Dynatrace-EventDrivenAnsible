@@ -12,7 +12,7 @@ from extensions.eda.plugins.event_source.dt_webhook import main as dt_webhook
 
 args = {
     "host": "127.0.0.1",
-    "port": 1234,
+    "port": 5000,
     "token": "thisisnotanactualtoken",
 }
 url = f'http://{args["host"]}:{args["port"]}/event'
