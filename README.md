@@ -1,14 +1,21 @@
-# Dynatrace + Red Hat Event Driven Ansible: Auto-Remediation
+# Dynatrace + Red Hat Event Driven Ansible
+
+This collection contains the following to Event-Driven Ansible source plugins:
+
+ * dt_webhook
+ * dt_esa_api
+
+## Auto-Remediation (dt_esa_api)
 
 This Event source plugin from Dynatrace captures all problems from your Dynatrace tenant and in conjunction with Ansible EDA rulebooks helps to enable auto-remediation in your environment.
 
-## Requirements
+### Requirements
 
 * Dynatrace SaaS or Managed environment
 * Dynatrace API Token with the following scopes: `Read problems` and `Write problems`
 * Ansible Automation Platform with EDA Controller instance
 
-## Example rulebook
+### Example rulebook
 
 ```yaml
 ---
@@ -42,6 +49,31 @@ This Event source plugin from Dynatrace captures all problems from your Dynatrac
         run_playbook:
           name: dt-update-comments.yml
 ```
+
+## dt_webhook 
+
+The dt_webhook event-source plugin is capable of receiving events from Dynatrace via the "Send event to Event-Driven Ansible" workflow action of the Red Hat Ansible for Workflows integration.
+
+### Example rulebook
+
+  ```yaml
+  ---
+  - name: Listen for events on dt_webhook
+    hosts: all
+    sources:
+      - dynatrace.event_driven_ansible.dt_webhook:
+          host: 0.0.0.0
+          port: 5000
+          token: '{{ <token_variable_name> }}'
+
+    rules:
+      - name: API Endpoint not available
+        condition: event.payload.eventData["event.name"] is match ("Monitoring not available")
+        action:
+          run_job_template:
+            name: "Trigger test playbook"
+            organization: "Default"    
+  ```
 
 ## Licensing
 
