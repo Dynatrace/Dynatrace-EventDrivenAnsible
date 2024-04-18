@@ -1,0 +1,7 @@
+---
+# .ansible-lint configuration
+
+profile: production # null, min, basic, moderate,safety, shared, production
+
+warn_list:
+  - experimental
