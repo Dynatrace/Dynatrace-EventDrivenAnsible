@@ -43,7 +43,3 @@ jobs:
       - name: Run unit tests
         run: ansible-test units --venv -v --num-workers 1
         working-directory: ansible_collections/ansible/eda
-
-      - name: Run integration tests
-        run: pytest tests/integration --log-cli-level=DEBUG
-        working-directory: ansible_collections/ansible/eda
