@@ -1,6 +1,6 @@
 # Dynatrace + Red Hat Event Driven Ansible
 
-This collection contains the following to Event-Driven Ansible source plugins:
+This collection contains the following Event-Driven Ansible source plugins:
 
  * dt_webhook
  * dt_esa_api
