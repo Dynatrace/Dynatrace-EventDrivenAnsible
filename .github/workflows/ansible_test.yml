@@ -45,5 +45,5 @@ jobs:
         working-directory: ansible_collections/ansible/eda
 
       - name: Run integration tests
-        run: pytest tests/integration -vvv -s
+        run: pytest tests/integration --log-cli-level=LOG_CLI_LEVEL
         working-directory: ansible_collections/ansible/eda
