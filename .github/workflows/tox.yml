@@ -1,6 +1,13 @@
 ---
-on: [push, pull_request]
 name: Tox
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  # Run tox nightly
+  schedule:
+    - cron: '0 2 * * *'
 jobs:
   tox:
     runs-on: ubuntu-latest

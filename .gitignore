@@ -16,6 +16,7 @@ tests/output
 releases/*
 vars.yml
 *__pycac
+.ruff_cache
 
 # Antsibull-changelog
 changelogs/.plugin-cache.yaml
