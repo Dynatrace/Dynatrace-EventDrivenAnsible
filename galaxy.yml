@@ -22,8 +22,9 @@ authors:
 ### OPTIONAL but strongly recommended
 # A short summary description of the collection
 description: |
-  This Event source plugin from Dynatrace captures all problems from your Dynatrace tenant and in conjunction with
-  Ansible EDA rulebooks helps to enable auto-remediation in your environment.
+  This collection contains two event source plugins from Dynatrace. The dt_esa_api plugin captures all problems from your Dynatrace tenant and in conjunction with
+  Ansible EDA rulebooks helps to enable auto-remediation in your environment. The dt_webhook plugin listens for events sent by the Red Hat 
+  Ansible for workflows integration from Dynatrace. 
 
 # Either a single license or a list of licenses for content inside of a collection. Ansible Galaxy currently only
 # accepts L(SPDX,https://spdx.org/licenses/) licenses. This key is mutually exclusive with 'license_file'

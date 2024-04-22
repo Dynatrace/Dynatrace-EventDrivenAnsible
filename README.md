@@ -52,7 +52,7 @@ This Event source plugin from Dynatrace captures all problems from your Dynatrac
 
 ## dt_webhook 
 
-The dt_webhook event-source plugin is capable of receiving events from Dynatrace via the "Send event to Event-Driven Ansible" workflow action of the Red Hat Ansible for Workflows integration.
+The dt_webhook event-source plugin is capable of receiving events from Dynatrace via the "Send event to Event-Driven Ansible" workflow action of the [Red Hat Ansible for Workflows integration](https://docs.dynatrace.com/docs/platform-modules/automations/workflows/actions/redhat).
 
 ### Example rulebook
 
