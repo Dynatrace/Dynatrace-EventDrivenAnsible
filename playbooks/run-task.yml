@@ -1,11 +1,10 @@
 ---
-- name:  local event-driven-ansible test
+- name: Local event-driven-ansible test
   hosts: localhost
   tasks:
     - name: Print Dynatrace event
-      debug:
+      ansible.builtin.debug:
         msg: "{{ ansible_eda.event.payload }}"
     - name: "Here could be your ansible task for resolving the problem"
-      debug: 
+      ansible.builtin.debug:
         msg: "Resolve problem for the following affected entities {{ ansible_eda.event.payload.eventData.affected_entity_ids }}"
-

@@ -12,16 +12,18 @@ from extensions.eda.plugins.event_source.dt_webhook import main as dt_webhook
 
 args = {
     "host": "127.0.0.1",
-    "port": 1234,
+    "port": 5000,
     "token": "thisisnotanactualtoken",
 }
 url = f'http://{args["host"]}:{args["port"]}/event'
 payload = json.dumps({"eventId": "1A2B3C"})
 headers = {"Authorization": "Bearer " + args["token"]}
 
+
 async def run_webhook() -> None:  # noqa: FA102, D103
     """Start webhook."""
     await dt_webhook(asyncio.Queue(), args)
+
 
 @pytest.mark.asyncio
 async def test_with_incorrect_path():
@@ -29,15 +31,15 @@ async def test_with_incorrect_path():
     async def do_request():
         async with aiohttp.ClientSession(headers=headers) as session:
             async with session.post(f'http://{args["host"]}:{args["port"]}/something', data=payload) as resp:
-                # task_cancel() stops the plugin coroutine which is wrapped into the task will never 
+                # task_cancel() stops the plugin coroutine which is wrapped into the task will never
                 # stop and also the test will not be terminated.
                 plugin_task.cancel()
                 assert resp.status == HTTPStatus.NOT_FOUND
 
-
     plugin_task = asyncio.create_task(run_webhook())
     request_task = asyncio.create_task(do_request())
     await asyncio.gather(plugin_task, request_task)
+
 
 @pytest.mark.asyncio
 async def test_event_body_valid_json():
@@ -53,6 +55,7 @@ async def test_event_body_valid_json():
     plugin_task = asyncio.create_task(run_webhook())
     request_task = asyncio.create_task(do_request())
     await asyncio.gather(plugin_task, request_task)
+
 
 @pytest.mark.asyncio
 async def test_event_body_with_invalid_json():

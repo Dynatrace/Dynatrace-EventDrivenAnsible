@@ -83,6 +83,7 @@ async def updatedtproblem(prob_id: str, dtapihost: str, dtapitoken: str,
         except aiohttp.ClientError:
             logging.exception("aiohttp client Exception")
 
+
 async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
     """Process the problem information.
 

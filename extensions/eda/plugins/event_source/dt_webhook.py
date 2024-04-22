@@ -3,7 +3,7 @@
 
 Description:
 This is an event source plugin for receiving events via a webhook
-from the "send-event-to-eda" action of Dynatrace Workflows.
+from the "send-event-to-eda" action of the Red Hat Ansible for Workflows integration.
 The payload must be a valid JSON object.
 
 Usage in a rulebook:
