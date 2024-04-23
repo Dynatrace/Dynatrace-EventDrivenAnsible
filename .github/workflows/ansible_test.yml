@@ -4,7 +4,9 @@ on:
     branches: ["main"]
   pull_request:
     branches: ["main"]
-
+  # Run ansible-test nightly
+  schedule:
+    - cron: '0 2 * * *'
 jobs:
   tests:
     runs-on: ubuntu-latest
