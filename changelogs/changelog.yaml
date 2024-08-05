@@ -3,8 +3,15 @@ releases:
   1.2.0:
     changes:
       minor_changes:
-        - Set up ansible-lint and ansible-test for collection.
+      - Set up ansible-lint and ansible-test for collection.
       release_summary: Initial release of the even source plugin dt_webhook.
     fragments:
-      - CA-9156-add-ansible-lint-and-ansible-test.yml
+    - CA-9156-add-ansible-lint-and-ansible-test.yml
     release_date: '2024-04-24'
+  1.2.1:
+    changes:
+      minor_changes:
+      - ansible-lint - update requires_ansible to >=2.15.0 to fix ansible-lint action
+    fragments:
+    - 38-update-requires_ansible.yml
+    release_date: '2024-08-05'
