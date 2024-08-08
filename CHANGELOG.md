@@ -2,9 +2,19 @@
 
 **Topics**
 
+- <a href="#v1-2-1">v1\.2\.1</a>
+    - <a href="#minor-changes">Minor Changes</a>
 - <a href="#v1-2-0">v1\.2\.0</a>
     - <a href="#release-summary">Release Summary</a>
-    - <a href="#minor-changes">Minor Changes</a>
+    - <a href="#minor-changes-1">Minor Changes</a>
+
+<a id="v1-2-1"></a>
+## v1\.2\.1
+
+<a id="minor-changes"></a>
+### Minor Changes
+
+* ansible\-lint \- update requires\_ansible to \>\=2\.15\.0 to fix ansible\-lint action
 
 <a id="v1-2-0"></a>
 ## v1\.2\.0
@@ -14,7 +24,7 @@
 
 Initial release of the even source plugin dt\_webhook\.
 
-<a id="minor-changes"></a>
+<a id="minor-changes-1"></a>
 ### Minor Changes
 
 * Set up ansible\-lint and ansible\-test for collection\.
