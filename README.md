@@ -56,24 +56,24 @@ The dt_webhook event-source plugin is capable of receiving events from Dynatrace
 
 ### Example rulebook
 
-  ```yaml
-  ---
-  - name: Listen for events on dt_webhook
-    hosts: all
-    sources:
-      - dynatrace.event_driven_ansible.dt_webhook:
-          host: 0.0.0.0
-          port: 5000
-          token: '{{ <token_variable_name> }}'
+```yaml
+---
+- name: Listen for events on dt_webhook
+  hosts: all
+  sources:
+    - dynatrace.event_driven_ansible.dt_webhook:
+        host: 0.0.0.0
+        port: 5000
+        token: '{{ <token_variable_name> }}'
 
-    rules:
-      - name: API Endpoint not available
-        condition: event.payload.eventData["event.name"] is match ("Monitoring not available")
-        action:
-          run_job_template:
-            name: "Trigger test playbook"
-            organization: "Default"    
-  ```
+  rules:
+    - name: API Endpoint not available
+      condition: event.payload.eventData["event.name"] is match ("Monitoring not available")
+      action:
+        run_job_template:
+          name: "Trigger test playbook"
+          organization: "Default"    
+```
 
 ## Licensing
 
