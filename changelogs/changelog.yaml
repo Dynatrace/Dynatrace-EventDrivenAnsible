@@ -15,3 +15,10 @@ releases:
     fragments:
       - 38-update-requires_ansible.yml
     release_date: '2024-08-05'
+  1.2.2:
+    changes:
+      minor_changes:
+        - README - fix dt_webhook rulebook example
+    fragments:
+      - 39-fix-readme.yml
+    release_date: '2024-09-17'
