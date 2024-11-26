@@ -1,0 +1,16 @@
+# this rulebook is for local testing with ansible-rulebook cli
+---
+- name: Listen for events on dt_webhook
+  hosts: all
+  sources:
+    - dt_webhook: # use dt_webhook as source for tests with local ansible-rulebook
+        host: 0.0.0.0
+        port: 6009
+        token: '{{ var_eda_token }}'
+
+  rules:
+    - name: API Endpoint not available
+      condition: event.payload.eventData["event.name"] is match ("Monitoring not available")
+      action:
+        run_playbook: # use run_playbook instead run_job_template for local tests with ansible-rulebook
+          name: playbooks/run-task.yml
