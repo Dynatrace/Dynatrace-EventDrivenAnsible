@@ -1,4 +1,3 @@
-# ruff: noqa: FA102, D413
 """dt_webhook.py.
 
 Description:
@@ -43,7 +42,7 @@ logger = logging.getLogger(__name__)
 routes = web.RouteTableDef()
 
 
-# initialize loggger configuration
+# initialize logger configuration
 def _initialize_logger_config() -> None:
     logging.basicConfig(
         format="[%(asctime)s] - %(pathname)s: %(message)s",
@@ -191,7 +190,7 @@ async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
 
     """
     _initialize_logger_config()
-    logging.info("Starting dt_webhook...")
+    logger.info("Starting dt_webhook...")
 
     app_attrs = _set_app_attributes(args)
     app = web.Application(middlewares=[check_auth])

@@ -8,6 +8,15 @@ from typing import Any
 # pylint: disable-next=import-error
 import aiohttp
 
+logger = logging.getLogger(__name__)
+
+# initialize logger configuration
+def _initialize_logger_config() -> None:
+    logging.basicConfig(
+        format="[%(asctime)s] - %(pathname)s: %(message)s",
+        level=logging.INFO,
+        datefmt="%Y-%m-%d %I:%M:%S",
+    )
 
 async def getproblems(dt_host: str, dt_token: str, proxy: str) -> None:
     """Pull Dynatrace detected problems from Dynatrace Problems API.
@@ -37,11 +46,11 @@ async def getproblems(dt_host: str, dt_token: str, proxy: str) -> None:
             try:
                 return await resp.json()
             except aiohttp.ClientResponseError:
-                logging.exception("Exception in response from Dynatrace API")
+                logger.exception("Exception in response from Dynatrace API")
             except aiohttp.ClientConnectionError:
-                logging.exception("Exception connecting to Dynatrace API")
+                logger.exception("Exception connecting to Dynatrace API")
             except aiohttp.ClientError:
-                logging.exception("aiohttp client Exception")
+                logger.exception("aiohttp client Exception")
 
 
 async def updatedtproblem(prob_id: str, dtapihost: str, dtapitoken: str,
@@ -74,14 +83,14 @@ async def updatedtproblem(prob_id: str, dtapihost: str, dtapitoken: str,
             resp = await session.post(url, json=commentbody, proxy=proxy)
             warning_status = 201
             if resp.status != warning_status:
-                logging.warning(resp.status)
-                logging.warning(resp.text)
+                logger.warning(resp.status)
+                logger.warning(resp.text)
         except aiohttp.ClientResponseError:
-            logging.exception("Exception in response from Dynatrace API")
+            logger.exception("Exception in response from Dynatrace API")
         except aiohttp.ClientConnectionError:
-            logging.exception("Exception connecting to Dynatrace API")
+            logger.exception("Exception connecting to Dynatrace API")
         except aiohttp.ClientError:
-            logging.exception("aiohttp client Exception")
+            logger.exception("aiohttp client Exception")
 
 
 async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
@@ -95,6 +104,7 @@ async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
         Args containing the host and API access token.
 
     """
+    _initialize_logger_config()
     dt_api_host = args.get("dt_api_host")
     dt_api_token = args.get("dt_api_token")
     delay = int(args.get("delay", 60))
@@ -111,7 +121,7 @@ async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
                         # ignore this problem
                         commentcount = commentcount + 1
                 if commentcount > 0:
-                    logging.info("This problem has already been sent to EDA server")
+                    logger.info("This problem has already been sent to EDA server")
                 else:
                     prob_id = problem.get("problemId")
                     await queue.put(problem)
@@ -119,4 +129,4 @@ async def main(queue: asyncio.Queue, args: dict[str, Any]) -> None:
                     await updatedtproblem(prob_id, dt_api_host, dt_api_token, proxy)
             await asyncio.sleep(delay)
     except (asyncio.TimeoutError, asyncio.CancelledError):
-        logging.exception("Async request timed out or cancelled")
+        logger.exception("Async request timed out or cancelled")
