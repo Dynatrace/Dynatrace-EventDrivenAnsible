@@ -1,12 +1,38 @@
-"""dt_webhook.py.
 
-Description:
-This is an event source plugin for receiving events via a webhook
-from the "send-event-to-eda" action of the Red Hat Ansible for Workflows integration.
-The payload must be a valid JSON object.
+"""Dynatrace Webhook Event Source Plugin for Ansible EDA.
 
-Usage in a rulebook:
-- name: Watch for new events
+This plugin listens for incoming HTTP webhook events from
+Dynatrace Red Hat Ansible Connector App.
+"""
+import asyncio
+import json
+import logging
+from collections.abc import Callable
+from typing import Any
+# pylint: disable-next=import-error
+from aiohttp import web
+
+DOCUMENTATION = r"""
+---
+name: dt_webhook.py
+description:
+  - This is an event source plugin for receiving events via a webhook
+    from the "send-event-to-eda" action of the Red Hat Ansible Connector.
+    The payload must be a valid JSON object.
+options:
+  host:
+    description:
+      - The hostname to listen to
+  port:
+    description:
+      - The TCP port to listen to
+  token:
+    description:
+      - The authentication token expected from Dynatrace
+"""
+
+EXAMPLES = r"""
+- name: Watch for new events rulebook
   hosts: localhost
   sources:
     - dynatrace.event_driven_ansible.dt_webhook:
@@ -21,22 +47,7 @@ Usage in a rulebook:
         run_job_template:
           name: "Run my job template"
           organization: "Default"
-
-Arguments:
----------
-  - host:     The hostname to listen to
-  - port:     The TCP port to listen to
-  - token:    The authentication token expected from Dynatrace
-
 """
-import asyncio
-import json
-import logging
-from collections.abc import Callable
-from typing import Any
-
-# pylint: disable-next=import-error
-from aiohttp import web
 
 logger = logging.getLogger(__name__)
 routes = web.RouteTableDef()
