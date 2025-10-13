@@ -13,8 +13,5 @@
 # FYI: Owners will be auto-assigned for code reviews as well
 #################################################################################
 
-# Owners for source plugin dt_esa_api.py
-extensions/eda/plugins/event_source/dt_esa_api.py @Jai28
-
 # Owners for source plugin dt_webhook.py
 extensions/eda/plugins/event_source/dt_webhook.py @dynatrace/eventdrivenansible-member 
